@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif; /* Fonte padrão, limpa */
+}
+
+body {
+    height: 100vh;
+    background-color: #121212; /* Aqui define o fundo preto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.login-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 20px; /* Cantos arredondados */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+.user-icon {
+    margin-bottom: 30px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field {
+    background-color: #f0f2f5; /* Cor de fundo suave do input */
+    border: 2px solid transparent; /* Borda transparente por padrão */
+    border-radius: 10px; /* Cantos arredondados do input */
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center; /* Texto de espaço reservado centralizado */
+    color: #4a5568;
+    font-size: 16px;
+    transition: border-color 0.2s; /* Transição para efeito de foco */
+}
+
+.input-field::placeholder {
+    color: #a0aec0; /* Texto do placeholder mais claro */
+    font-weight: normal;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #4da6ff; /* Cor da borda no foco */
+}
+
+.login-btn {
+    background-color: #4da6ff; /* Botão de login azul */
+    color: white;
+    border: none;
+    border-radius: 30px; /* Botão totalmente arredondado */
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    transition: background-color 0.2s;
+}
+
+.login-btn:hover {
+    background-color: #357ebd; /* Cor de hover mais escura */
+}
+
+.forgot-password {
+    color: #718096; /* Cor do link de texto cinza-azulada */
+    text-decoration: none; /* Sem sublinhado */
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.forgot-password:hover {
+    color: #4a5568; /* Cor do link de texto mais escura no hover */
+    text-decoration: underline; /* Adiciona sublinhado no hover (opcional) */
+}

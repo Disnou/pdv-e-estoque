@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>DISNOU PDV · Vendas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="pdv.css"> 
+</head>
+<body>
+
+<div class="topbar-accent"></div>
+
+<header>
+  <div class="brand-cluster">
+    <div class="logo-mark"></div>
+    <div class="brand-text">
+      <div class="name">DISNOU<span>PDV</span></div>
+      <div class="sub">Frente de caixa</div>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <div class="operator-chip">
+      <span class="operator-dot"></span>
+      <span>Operador: <b id="nomeOperador">CAIXA</b></span>
+    </div>
+    <a href="../estoque/estoque.html" id="btnEstoque" class="btn btn-outline" style="display: none; text-decoration: none;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8L12 3 3 8l9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+      Estoque
+    </a>
+    <a href="../login/login.html" class="btn btn-danger-ghost logout-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      Sair
+    </a>
+  </div>
+</header>
+
+<main>
+  <!-- PAINEL DA ESQUERDA: LISTA DE ITENS -->
+  <section class="panel">
+    <div class="items-head">
+      <h2>Itens da venda</h2>
+      <span class="count-badge" id="countBadge">0 itens</span>
+    </div>
+
+    <div class="table-wrap" id="tableWrap">
+      <div class="empty-state" id="emptyState">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="3" y="6" width="2" height="12"/><rect x="7" y="6" width="1" height="12"/><rect x="10" y="6" width="3" height="12"/><rect x="15" y="6" width="1" height="12"/><rect x="18" y="6" width="2" height="12"/><rect x="21" y="6" width="1" height="12"/>
+        </svg>
+        <div class="t1">Nenhum item adicionado</div>
+        <div class="t2">Digite o código do produto ou use o leitor para começar a venda.</div>
+      </div>
+
+      <table id="itemsTable" style="display:none;">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th class="center">Qtd</th>
+            <th class="num">Preço unit.</th>
+            <th class="num">Subtotal</th>
+            <th class="center">&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody id="listaProdutos"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PAINEL DA DIREITA: CONTROLES -->
+  <aside class="panel side-panel">
+    <div>
+      <div class="section-label">Adicionar produto</div>
+      <div class="field">
+        <label for="codigoProduto">Código do produto (Enter vazio finaliza)</label>
+        <div class="input-wrap">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8v8M11 8v8M14 8v8M17 8v8"/></svg>
+          <input id="codigoProduto" type="text" placeholder="Digite ou passe o leitor" autofocus>
+        </div>
+        <div class="reader-status"><span class="reader-dot"></span> Leitor conectado</div>
+      </div>
+
+      <div class="qty-row">
+        <div style="flex:1;">
+          <label style="display:block; font-size:12px; font-weight:500; color:var(--text-secondary); margin-bottom:7px;">Quantidade (Aperte * ou X)</label>
+          <div class="qty-stepper">
+            <button type="button" id="qtyMinus">−</button>
+            <input id="quantidade" type="text" value="1" inputmode="numeric">
+            <button type="button" id="qtyPlus">+</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-add" id="btnAdicionar">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#04140f" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+        Adicionar item (Enter)
+      </button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div>
+      <div class="summary-row total">
+        <span class="lbl">Total a pagar</span>
+        <span class="val" id="valorTotal">R$ 0,00</span>
+      </div>
+    </div>
+
+    <button class="btn-finalize" id="btnFinalizar">
+      Finalizar venda
+      <span class="key">Enter</span>
+    </button>
+  </aside>
+</main>
+
+<!-- ========================================== -->
+<!-- MODAL DE PAGAMENTO (ADAPTADO PRO DARK MODE)-->
+<!-- ========================================== -->
+<div id="modalPagamento" class="modal-overlay" style="display: none;">
+    <div class="modal-content modal-pagamento-tamanho">
+        <div class="modal-header">
+            <h2>Finalizar Pagamento</h2>
+            <button id="btnFecharModal" class="fechar-btn">X</button>
+        </div>
+        
+        <div class="resumo-pagamento">
+            <!-- FIDELIDADE -->
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 20px;">
+                <input type="text" id="inputCpfFidelidade" placeholder="CPF do Cliente (Pressione Enter para pular)" style="flex: 1; padding: 12px; background: var(--bg-field); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-family: 'JetBrains Mono';">
+                <button id="btnAplicarFidelidade" style="background-color: var(--accent); color: #161200; border: none; padding: 10px 20px; font-size: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-family: 'Space Grotesk';">Buscar (Enter)</button>
+            </div>
+
+            <div class="linha-resumo"><span>Total dos Itens:</span> <span id="modalTotal">R$ 0,00</span></div>
+            <div class="linha-resumo" id="linhaDescontoDia" style="display: none; color: var(--accent);"><span>Promoção do Dia:</span> <span id="modalDescontoDia">- R$ 0,00</span></div>
+            <div class="linha-resumo" id="linhaDescontoFidelidade" style="display: none; color: var(--success);"><span>Clube Fidelidade:</span> <span id="modalDescontoFidelidade">- R$ 0,00</span></div>
+            
+            <div class="linha-resumo" style="border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px;"><span>Falta Pagar:</span> <strong id="modalFaltante" style="color: var(--danger);">R$ 0,00</strong></div>
+            <div class="linha-resumo"><span>Troco:</span> <strong id="modalTroco" style="color: var(--success);">R$ 0,00</strong></div>
+        </div>
+
+        <div class="metodos-pagamento" id="botoesMetodo">
+            <button class="btn-metodo btn-grande" onclick="selecionarMetodo('Dinheiro')"><strong>[1]</strong> 💵 Dinheiro</button>
+            <button class="btn-metodo btn-grande" onclick="selecionarMetodo('Cartão')"><strong>[2]</strong> 💳 Cartão</button>
+            <button class="btn-metodo btn-grande" onclick="selecionarMetodo('PIX')"><strong>[3]</strong> 📱 PIX</button>
+        </div>
+
+        <div id="areaDinamicaPagamento" style="display: none;">
+            <h3 id="tituloMetodo" style="margin-bottom: 15px; color: var(--accent); font-size: 20px; text-align: center; font-family: 'Space Grotesk';"></h3>
+            
+            <div id="areaQRCode" style="display: none; text-align: center; margin-bottom: 20px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix" alt="QR Code PIX" style="border-radius: 8px; border: 4px solid white;">
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">Aguardando leitura...</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-size: 14px; color: var(--text-secondary);">Valor a ser pago:</label>
+                <input type="number" id="valorPagamentoParcial" step="0.01" style="font-size: 24px; padding: 15px; text-align: center; background: var(--bg-field); color: var(--accent); border: 1px solid var(--border); border-radius: 8px; font-family: 'JetBrains Mono'; outline: none;">
+            </div>
+            <button id="btnConfirmarParte" class="btn-finalize" style="margin-top: 15px;">Confirmar Pagamento (Enter)</button>
+        </div>
+
+        <div id="listaPagamentosFeitos" class="pagamentos-feitos"></div>
+
+        <button id="btnConcluirVenda" class="btn-finalize" style="display: none; margin-top: 25px; padding: 25px; font-size: 20px; background: var(--success); color: #04140f;">✅ CONCLUIR E IMPRIMIR CUPOM (Enter)</button>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL DE ALERTAS GERAIS -->
+<!-- ========================================== -->
+<div id="modalAlertaCustom" class="modal-overlay" style="display: none; z-index: 2000;">
+    <div class="modal-alerta-content">
+        <h2 id="tituloAlertaCustom">Aviso</h2>
+        <p id="textoAlertaCustom">Mensagem aqui</p>
+        <div class="alerta-botoes">
+            <button id="btnCancelarAlerta" class="btn-acao-alerta" style="display: none; background: transparent; border: 1px solid var(--border); color: var(--text-secondary);">Não</button>
+            <button id="btnOkAlerta" class="btn-acao-alerta">Ok</button>
+        </div>
+    </div>
+</div>
+
+<script src="pdv.js"></script>
+</body>
+</html>

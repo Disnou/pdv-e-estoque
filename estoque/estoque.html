@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DISNOU PDV · Painel Gerencial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estoque.css">
+</head>
+<body>
+    <div class="topbar-accent"></div>
+
+    <header>
+        <div class="brand-cluster">
+            <div class="logo-mark"></div>
+            <div class="brand-text">
+                <div class="name">DISNOU<span>PDV</span></div>
+                <div class="sub">Gestão e Auditoria</div>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="operator-chip">
+                <span class="operator-dot" style="background: var(--accent); box-shadow: 0 0 0 3px rgba(242,183,5,0.15);"></span>
+                <span id="nomeGerente">GERENTE</span>
+            </div>
+            <a href="../pdv/pdv.html" class="btn btn-outline" style="text-decoration: none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Voltar ao Caixa
+            </a>
+        </div>
+    </header>
+
+    <main class="estoque-container">
+        <div class="dashboard-grid">
+            <div class="card-dash card-total">
+                <h3>Faturamento Bruto</h3>
+                <h2 id="dashTotal">R$ 0,00</h2>
+            </div>
+            <div class="card-dash">
+                <h3>💵 Dinheiro</h3>
+                <h2 id="dashDinheiro">R$ 0,00</h2>
+            </div>
+            <div class="card-dash">
+                <h3>💳 Cartão</h3>
+                <h2 id="dashCartao">R$ 0,00</h2>
+            </div>
+            <div class="card-dash">
+                <h3>📱 PIX</h3>
+                <h2 id="dashPix">R$ 0,00</h2>
+            </div>
+        </div>
+
+        <div class="conteudo-flex">
+            <section class="panel formulario-area">
+                <div class="panel-head"><h2>Gerenciar Produto</h2></div>
+                <form id="formProduto" class="panel-body">
+                    <div class="input-grupo">
+                        <label for="prodCodigo">Código de Barras</label>
+                        <input type="text" id="prodCodigo" placeholder="Ex: 123" required>
+                    </div>
+                    <div class="input-grupo">
+                        <label for="prodNome">Descrição do Produto</label>
+                        <input type="text" id="prodNome" placeholder="Ex: Arroz Branco 5kg" required>
+                    </div>
+                    <div class="row-inputs">
+                        <div class="input-grupo" style="flex: 1;">
+                            <label for="prodPreco">Preço (R$)</label>
+                            <input type="number" id="prodPreco" step="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="input-grupo" style="flex: 1;">
+                            <label for="prodQtd">Estoque</label>
+                            <input type="number" id="prodQtd" placeholder="Qtd" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-salvar">Salvar no Estoque</button>
+                </form>
+            </section>
+
+            <section class="panel tabela-area">
+                <div class="panel-head flex-between">
+                    <h2>Inventário Ativo</h2>
+                    <input type="text" id="inputBusca" class="search-input" placeholder="Buscar produto...">
+                </div>
+                <div class="tabela-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Produto</th>
+                                <th>Preço</th>
+                                <th class="center">Qtd</th>
+                                <th class="center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoTabelaEstoque"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div class="conteudo-flex">
+            <section class="panel formulario-area">
+                <div class="panel-head"><h2>Oferta do Dia</h2></div>
+                <form id="formDescontoDia" class="panel-body">
+                    <div class="input-grupo">
+                        <label for="promocaoDiaSemana">Dia da Semana</label>
+                        <select id="promocaoDiaSemana" required>
+                            <option value="Domingo">Domingo</option>
+                            <option value="Segunda-feira">Segunda-feira</option>
+                            <option value="Terça-feira">Terça-feira</option>
+                            <option value="Quarta-feira">Quarta-feira</option>
+                            <option value="Quinta-feira">Quinta-feira</option>
+                            <option value="Sexta-feira">Sexta-feira</option>
+                            <option value="Sábado">Sábado</option>
+                        </select>
+                    </div>
+                    <div class="input-grupo">
+                        <label for="promocaoCodigoProd">Código do Produto</label>
+                        <input type="text" id="promocaoCodigoProd" placeholder="Ex: 123" required>
+                    </div>
+                    <div class="input-grupo">
+                        <label for="promocaoPorcentagem">Desconto (%)</label>
+                        <input type="number" id="promocaoPorcentagem" min="1" max="100" placeholder="Ex: 15" required>
+                    </div>
+                    <button type="submit" class="btn-salvar btn-promocao">Definir Promoção</button>
+                </form>
+            </section>
+
+            <section class="panel tabela-area">
+                <div class="panel-head"><h2>Cronograma Semanal</h2></div>
+                <div class="tabela-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Dia da Semana</th>
+                                <th>Produto em Oferta</th>
+                                <th>Desconto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoTabelaDescontos"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div class="conteudo-flex">
+            <section class="panel formulario-area" id="areaCadastroClientes">
+                <div class="panel-head"><h2>Clube Fidelidade</h2></div>
+                <form id="formCliente" class="panel-body">
+                    <div class="input-grupo">
+                        <label for="clienteCpf">CPF (Apenas números)</label>
+                        <input type="text" id="clienteCpf" placeholder="000.000.000-00" required>
+                    </div>
+                    <div class="input-grupo">
+                        <label for="clienteNome">Nome Completo</label>
+                        <input type="text" id="clienteNome" placeholder="Nome do Cliente" required>
+                    </div>
+                    <button type="submit" class="btn-salvar btn-fidelidade">Cadastrar Membro</button>
+                </form>
+            </section>
+
+            <section class="panel tabela-area">
+                <div class="panel-head flex-between">
+                    <h2>Membros Cadastrados</h2>
+                    <input type="text" id="inputBuscaCliente" class="search-input" placeholder="Buscar CPF...">
+                </div>
+                <div class="tabela-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CPF Registrado</th>
+                                <th>Nome do Cliente</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoTabelaClientes"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <section class="panel historico-area">
+            <div class="panel-head"><h2>Auditoria Contábil (Fita Detalhe)</h2></div>
+            <div class="tabela-wrapper" style="max-height: 500px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data e Hora</th>
+                            <th>Operador</th>
+                            <th>Faturamento Líquido</th>
+                            <th>Composição do Pagamento</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabelaHistorico"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="estoque.js"></script>
+</body>
+</html>
